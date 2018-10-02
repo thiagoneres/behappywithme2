@@ -1,5 +1,6 @@
 import React from 'react'
 import Label from '../Label/Index.jsx'
+import	Input	from	'../Input/Index.jsx'
 
 //definimos o component como classe, pois nele serão armazenados dados(states)
 //O valor da propriedade htmlFor ficou como nome,porque este será	o id da	<input>	associada.
@@ -10,6 +11,14 @@ class NovoUsuario extends React.Component{
             <div className="center">
                 <form className="pure-form pure-form-stacked">
                     <Label htmlFor="nome" texto="Quem é você?"></Label> 
+                    <Input
+                        id="nome"
+                        placeholder="Digite	seu	nome"
+                        maxLength="40"
+                        readOnly
+                        valorInvalido
+                        defaultValue="Guilherme"
+                    />
                 </form>
             </div>
 
