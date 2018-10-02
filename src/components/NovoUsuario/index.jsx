@@ -46,6 +46,7 @@ class NovoUsuario extends React.Component {
                         defaultValue={this.state.usuario.nome}
                         onChange={this.atualizarNome.bind(this)}
                     />
+
                 </form>
             </div>
 
