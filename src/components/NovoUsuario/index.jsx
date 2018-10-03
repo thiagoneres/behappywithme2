@@ -2,6 +2,7 @@ import React from 'react'
 import Label from '../Label/Index.jsx'
 import Input from '../Input/Index.jsx'
 import GenderSelector from '../GenderSelector/Index.jsx'
+import Usuario from '../../models/Usuario'
 
 //definimos o component como classe, pois nele serão armazenados dados(states)
 //O valor da propriedade htmlFor ficou como nome,porque este será	o id da	<input>	associada.
