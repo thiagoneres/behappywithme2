@@ -1,6 +1,7 @@
 import React from 'react'
 import Label from '../Label/Index.jsx'
 import Input from '../Input/Index.jsx'
+import GenderSelector from '../GenderSelector/Index.jsx'
 
 //definimos o component como classe, pois nele serão armazenados dados(states)
 //O valor da propriedade htmlFor ficou como nome,porque este será	o id da	<input>	associada.
@@ -11,10 +12,12 @@ class NovoUsuario extends React.Component {
         super(props);
         this.state = {
             usuario: {
-                nome: ''
+                nome: '',
+                genero: ''
             },
             validacao: {
-                nomeInvalido: false
+                nomeInvalido: false,
+                generoInvalido: false
             }
         };
 
@@ -23,6 +26,15 @@ class NovoUsuario extends React.Component {
     atualizarNome(e) {
         let usuario = this.state.usuario;
         usuario.nome = e.target.value;
+        this.setState({
+            usuario: usuario
+        });
+    }
+
+    atualizarGenero(e, genero) {
+        e.preventDefault();
+        let usuario = this.state.usuario;
+        usuario.genero = genero;
         this.setState({
             usuario: usuario
         });
@@ -45,6 +57,16 @@ class NovoUsuario extends React.Component {
                         valorInvalido={this.state.validacao.nomeInvalido}
                         defaultValue={this.state.usuario.nome}
                         onChange={this.atualizarNome.bind(this)}
+                    />
+
+                    <Label
+                        texto="Seu	gênero:"
+                        valorInvalido={this.state.validacao.generoInvalido}
+                    />
+                    <GenderSelector
+                        valorInvalido={this.state.validacao.generoInvalido}
+                        genero={this.state.usuario.genero}
+                        atualizarGenero={this.atualizarGenero.bind(this)}
                     />
 
                 </form>

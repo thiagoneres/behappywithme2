@@ -1,6 +1,6 @@
 import React from 'react'
 import './index.css'
-import GenderImage from '../GenderImage'
+import GenderImage from '../GenderImage/Index.jsx'
 
 export default function GenderButton(props) {
     return (
