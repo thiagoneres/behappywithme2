@@ -66,5 +66,154 @@ class ImageScroller extends React.Component {
             </ul>
         )
     }
+
+    renderizarSelecionado() {
+        return (
+            <span
+                style={{
+                    float: 'left',
+                    width: '140px',
+                    height: '160px',
+                    marginLeft: '42px',
+                    backgroundColor: '#00C853',
+                    position: 'relative',
+                    zIndex: -2
+                }}
+            ></span>
+        )
+    }
+
+    renderizarButtonImage(posicao) {
+        return (
+            <ButtonImage
+                posicao={posicao}
+            />
+        )
+    }
+
+    renderizarButtonImage(posicao) {
+        return (
+            <ButtonImage
+                posicao={posicao}
+                onTouchStart={e => e.stopPropagation()}
+                onTouchMove={e => e.stopPropagation()}
+                onTouchEnd={e => e.stopPropagation()}
+            />
+        )
+    }
+
+    renderizarButtonImage(posicao) {
+        return (
+            <ButtonImage
+                posicao={posicao}
+                onTouchStart={e => e.stopPropagation()}
+                onTouchMove={e => e.stopPropagation()}
+                onTouchEnd={e => e.stopPropagation()}
+                onClick={e => {
+                    e.preventDefault();
+                    let manipularEvento = this.state.manipularEvento;
+                    let index = manipularEvento.index;
+                    if (posicao == 'esquerda') {
+                        index += -1;
+                    } else {
+                        index += 1;
+                    }
+                    manipularEvento.definirIndex(index);
+                    manipularEvento.atualizarClique();
+                    this.setState({
+                        manipularEvento: manipularEvento
+                    }, () => {
+                        this.props.onChange(this.obterSelecionado());
+                    });
+                }}
+            />
+        )
+    }
+
+    renderizarImageScroller() {
+        const estilo = {
+            boxSizing: 'border-box',
+            borderWidth: '1px',
+            borderBottomWidth: '0',
+            borderStyle: 'solid',
+            borderColor: '#cccccc',
+            borderRadius: '5px',
+            borderBottomLeftRadius: '0',
+            borderBottomRightRadius: '0',
+            width: '310px',
+            height: '160px',
+            overflow: 'hidden'
+        };
+        return (
+            <div
+                style={estilo}
+                onTouchStart={this.onTouchStart.bind(this)}
+                onTouchMove={this.onTouchMove.bind(this)}
+                onTouchEnd={this.onTouchEnd.bind(this)}
+            >
+                {this.renderizarButtonImage('esquerda')}
+                {this.renderizarSelecionado()}
+                {this.renderizarImagens()}
+                {this.renderizarButtonImage('direita')}
+            </div>
+        )
+    }
+
+    onTouchStart(e) {
+        let clientX = e.targetTouches[0].clientX;
+        let manipularEvento = this.state.manipularEvento;
+        manipularEvento.iniciar(clientX);
+        this.setState({ manipularEvento: manipularEvento });
+    }
+
+    onTouchMove(e) {
+        let clientX = e.targetTouches[0].clientX;
+        let manipularEvento = this.state.manipularEvento;
+        manipularEvento.mover(clientX);
+        this.setState({ manipularEvento: manipularEvento });
+    }
+
+    onTouchEnd(e) {
+        let manipularEvento = this.state.manipularEvento;
+        manipularEvento.atualizarToque();
+        this.setState({ manipularEvento: manipularEvento }, () => {
+            this.props.onChange(this.obterSelecionado());
+        });
+    }
+
+    renderizarLabel() {
+        const estilo = {
+            boxSizing: 'border-box',
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            borderTopWidth: '0',
+            borderColor: '#cccccc',
+            borderRadius: '5px',
+            borderTopLeftRadius: '0',
+            borderTopRightRadius: '0',
+            backgroundColor: '#cccccc',
+            color: '#444444',
+            fontSize: '20px',
+            textAlign: 'center',
+            padding: '5px',
+            width: '380px'
+        };
+        return (
+            <div style={estilo}>
+                {this.obterSelecionado().toString()}
+            </div>
+        )
+    }
+
+    render() {
+        return (
+            <div>
+                {this.renderizarImageScroller()}
+                {this.renderizarLabel()}
+            </div>
+        )
+    }
+
+
 }
 export default ImageScroller;
