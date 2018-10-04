@@ -1,6 +1,6 @@
 import React from 'react'
-import Image from '../Image'
-import ButtonImage from '../ButtonImage'
+import Image from '../Image/Index.jsx'
+import ButtonImage from '../ButtonImage/Index.jsx'
 import ManipularEvento from './ManipularEvento'
 
 class ImageScroller extends React.Component {
@@ -204,6 +204,8 @@ class ImageScroller extends React.Component {
             </div>
         )
     }
+
+
 
     render() {
         return (

@@ -3,15 +3,15 @@ import Label from '../Label/Index.jsx'
 import Input from '../Input/Index.jsx'
 import GenderSelector from '../GenderSelector/Index.jsx'
 import Usuario from '../../models/Usuario'
+import Avatar from '../../models/Avatar'
 import Button from '../Button/Index.jsx'
+import ButtonImage from '../ButtonImage/Index.jsx'
+import ImageScroller from '../ImageScroller/Index.jsx'
 
-//definimos o component como classe, pois nele serão armazenados dados(states)
-//O valor da propriedade htmlFor ficou como nome,porque este será	o id da	<input>	associada.
-//classes do pure.css --> pure-form(define o estilo básico do form) e o pure-form-stacked(posiciona uma tag abaixo da outra)
 class NovoUsuario extends React.Component {
-
     constructor(props) {
         super(props);
+
         this.state = {
             usuario: new Usuario(),
             validacao: {
@@ -20,7 +20,6 @@ class NovoUsuario extends React.Component {
             },
             primeiraVisaoCompleta: false
         };
-
     }
 
     atualizarNome(e) {
@@ -30,36 +29,38 @@ class NovoUsuario extends React.Component {
             usuario: usuario
         });
     }
-
     atualizarGenero(e, genero) {
         e.preventDefault();
         let usuario = this.state.usuario;
         usuario.genero = genero;
+        usuario.avatar = Avatar.obterTodos()[0];
         this.setState({
             usuario: usuario
         });
     }
-
     validar(e) {
         e.preventDefault();
         let usuario = this.state.usuario;
+
         let validacao = this.state.validacao;
         validacao.nomeInvalido = !usuario.validarNome();
         validacao.generoInvalido = !usuario.validarGenero();
+
         let mensagem = '';
         let primeiraVisaoCompleta = false;
         if (validacao.nomeInvalido && validacao.generoInvalido) {
-            mensagem = 'Os	campos	nome	e	gênero	estão	inválidos!'
+            mensagem = 'Os campos nome e gênero estão inválidos!'
         } else if (validacao.nomeInvalido) {
-            mensagem = 'Seu	nome	está	inválido!'
+            mensagem = 'Seu nome está inválido!'
         } else if (validacao.generoInvalido) {
-            mensagem = 'Selecione	seu	gênero!'
+            mensagem = 'Selecione seu gênero!'
         } else {
             primeiraVisaoCompleta = true;
         }
         if (!primeiraVisaoCompleta) {
             this.props.erro(mensagem);
         }
+
         this.setState({
             validacao: validacao,
             primeiraVisaoCompleta: primeiraVisaoCompleta
@@ -87,7 +88,6 @@ class NovoUsuario extends React.Component {
         )
     }
 
-
     renderizarGenero() {
         if (this.state.primeiraVisaoCompleta) {
             return null
@@ -95,7 +95,7 @@ class NovoUsuario extends React.Component {
             return (
                 <section>
                     <Label
-                        texto="Seu	gênero:"
+                        texto="Seu gênero:"
                         valorInvalido={this.state.validacao.generoInvalido}
                     />
                     <GenderSelector
@@ -108,6 +108,33 @@ class NovoUsuario extends React.Component {
         }
     }
 
+    renderizarAvatar() {
+        if (this.state.primeiraVisaoCompleta) {
+            return (
+                <section>
+                    <Label
+                        texto="Escolha seu avatar:"
+                    />
+                    <ImageScroller
+                        arquivo="img/avatars.png"
+                        eixoY={(this.state.usuario.genero == 'm' ? 0 : 1)}
+                        elementos={Avatar.obterTodos()}
+                        selecionado={this.state.usuario.avatar}
+                        onChange={avatar => {
+                            let usuario = this.state.usuario;
+                            usuario.avatar = avatar;
+                            this.setState({
+                                usuario: usuario
+                            });
+                        }}
+                    />
+                </section>
+            )
+        } else {
+            return null
+        }
+    }
+
     renderizarBotoes() {
         if (this.state.primeiraVisaoCompleta) {
             return (
@@ -116,7 +143,10 @@ class NovoUsuario extends React.Component {
                         texto="Voltar"
                         onClick={e => {
                             e.preventDefault();
+                            let usuario = this.state.usuario
+                            usuario.avatar = Avatar.obterTodos()[0];
                             this.setState({
+                                usuario: usuario,
                                 primeiraVisaoCompleta: false
                             });
                         }}
@@ -124,6 +154,10 @@ class NovoUsuario extends React.Component {
                     <Button
                         principal
                         texto="Salvar"
+                        onClick={e => {
+                            e.preventDefault()
+                            this.props.onSubmit(this.state.usuario)
+                        }}
                     />
                 </section>
             )
@@ -143,17 +177,15 @@ class NovoUsuario extends React.Component {
     render() {
         return (
             <div className="center">
-
-                <form className="pure-form	pure-form-stacked">
+                <form className="pure-form pure-form-stacked">
                     {this.renderizarNome()}
                     {this.renderizarGenero()}
+                    {this.renderizarAvatar()}
                     {this.renderizarBotoes()}
                 </form>
             </div>
-
-        )
+        );
     }
-
 }
 
 export default NovoUsuario;
