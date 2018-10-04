@@ -196,7 +196,7 @@ class ImageScroller extends React.Component {
             fontSize: '20px',
             textAlign: 'center',
             padding: '5px',
-            width: '380px'
+            width: '100%'
         };
         return (
             <div style={estilo}>

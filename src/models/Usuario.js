@@ -1,8 +1,10 @@
 import './Avatar.js'
 import Avatar from './Avatar.js';
+import Repository from '../infrastructure/Repository.js'
+const repository = new Repository();
 
 class Usuario {
-    constructor() {
+    constructor() {        
         this.nome = ''
         this.genero = ''
         this.avatar = Avatar.obterTodos()[0]
@@ -17,12 +19,30 @@ class Usuario {
         }
         return false;
     }
-
     validarGenero() {
-        return ['m', 'f'].some(param => {
+        return ['m','f'].some(param => {
             return this.genero === param
         })
     }
+    toString() {
+        return `${this.nome}, ${this.avatar.toString()}`
+    }
 
+    salvar(callback) {        
+        repository.salvar(this,callback);
+    }
+    static obter(sucesso,falha) {
+        repository.obter(json => {
+            let usuario = new Usuario();
+            usuario.nome = json.nome;
+            usuario.genero = json.genero;
+            usuario.avatar = new Avatar(
+                json.avatar.index,
+                json.avatar.descricao
+            );            
+            sucesso(usuario);
+        },falha);
+    }
 }
+
 export default Usuario;
